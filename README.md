@@ -1,6 +1,5 @@
 # strongly
 
-
 ## Description
 
 strongly is a powerful and user-friendly Python client for interacting with the Strongly.AI's API. This package simplifies the process of authentication, session management, and making API calls, allowing you to focus on utilizing the data and functionality provided by our service.
