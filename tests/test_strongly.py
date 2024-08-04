@@ -120,3 +120,19 @@ def test_get_applied_filters(api_client):
     assert 'checked' not in result['filters'][1]
     assert result['userId'] == 'test-user-id'
     api_client.call_api.assert_called_once_with('GET', '/api/v1/filters')
+
+def test_create_session(api_client):
+    api_client.call_api = Mock(return_value={
+        'message': 'Session created successfully',
+        'sessionId': 'test-session-id'
+    })
+
+    result = api_client.create_session('Test Session')
+
+    assert result['message'] == 'Session created successfully'
+    assert result['sessionId'] == 'test-session-id'
+    api_client.call_api.assert_called_once_with(
+        'POST',
+        '/api/v1/session/create',
+        json={'sessionName': 'Test Session'}
+    )

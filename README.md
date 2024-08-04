@@ -43,6 +43,8 @@ API_HOST=https://your-api-host.com
 API_KEY=their-api-key-here
 ```
 
+API Keys can be created and filters assigned in the Strongly.AI application.
+
 
 ## Usage
 
@@ -92,19 +94,28 @@ To Do
 
 To Do
 
-### Create Session
+### Creating a New Chat Session
 
-To Do
+To create a new chat session using the Strongly API:
+
+```python
+from strongly import APIClient
+
+client = APIClient()
+
+try:
+    session_data = client.create_session("My New Chat Session")
+    print("Session created successfully!")
+    print("Session ID:", session_data['sessionId'])
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
 
 ### Remove Session
 
 To Do
 
 ### Update Session
-
-To Do
-
-### Archive Session
 
 To Do
 
@@ -169,8 +180,6 @@ We use [CI service name, e.g., GitHub Actions] for continuous integration. Every
 If you're adding new features or fixing bugs, please consider adding appropriate tests. This helps maintain the package's reliability and makes it easier for others to understand and verify your changes.
 
 If you have any questions about testing or need help interpreting test results, please don't hesitate to reach out to our support team.
-
-
 
 
 ## Need Help? We're Here for You!
