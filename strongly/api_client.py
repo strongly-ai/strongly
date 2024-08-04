@@ -94,3 +94,108 @@ class APIClient:
         """
         data = {"sessionName": session_name}
         return self.call_api('POST', '/api/v1/session/create', json=data)
+
+    def delete_session(self, session_id):
+        """
+        Delete a chat session.
+
+        Args:
+            session_id (str): The _id of the session to delete.
+
+        Returns:
+            dict: A dictionary containing response data.
+
+        Raises:
+            APIError: If the API call fails.
+        """
+        data = {"sessionId": session_id}
+        return self.call_api('POST', '/api/v1/session/delete', json=data)
+
+    def rename_session(self, session_id, new_name):
+        """
+        Rename a chat session.
+
+        Args:
+            session_id (str): The ID of the session to rename.
+            new_name (str): The new name for the session.
+
+        Returns:
+            dict: A dictionary containing response data.
+
+        Raises:
+            APIError: If the API call fails or if a session with the new name already exists.
+            ValueError: If session_id or new_name is invalid.
+        """
+        if not session_id or not isinstance(session_id, str):
+            raise ValueError("session_id must be a non-empty string")
+        if not new_name or not isinstance(new_name, str):
+            raise ValueError("new_name must be a non-empty string")
+
+        data = {"sessionId": session_id, "newName": new_name}
+        return self.call_api('POST', '/api/v1/session/rename', json=data)
+
+    def check_token_usage(self):
+        """
+        Check the token usage for the current user.
+
+        Returns:
+            dict: A dictionary containing token usage information.
+
+        Raises:
+            APIError: If the API call fails.
+        """
+        return self.call_api('GET', '/api/v1/tokens')
+
+    def filter_text(self, text):
+        """
+        Filter the given text using applicable filters.
+
+        Args:
+            text (str): The text to be filtered.
+
+        Returns:
+            dict: A dictionary containing the filtered text, filter counts, and hash map.
+
+        Raises:
+            APIError: If the API call fails.
+            ValueError: If text is invalid.
+        """
+        if not text or not isinstance(text, str):
+            raise ValueError("text must be a non-empty string")
+
+        data = {"text": text}
+        return self.call_api('POST', '/api/v1/filterText', json=data)
+
+    def submit_prompt(self, session, message, model, filter_counts=None, context_prompts=None):
+        """
+        Submit a prompt to the ChatGPT model.
+
+        Args:
+            session (dict): A dictionary containing 'sessionId' and 'sessionName'.
+            message (str): The prompt message to send.
+            model (str): The name of the model to use.
+            filter_counts (dict, optional): A dictionary of filter counts.
+            context_prompts (list, optional): A list of context prompts.
+
+        Returns:
+            dict: The response from the ChatGPT model.
+
+        Raises:
+            APIError: If the API call fails.
+            ValueError: If required parameters are missing or invalid.
+        """
+        if not isinstance(session, dict) or 'sessionId' not in session or 'sessionName' not in session:
+            raise ValueError("session must be a dictionary containing 'sessionId' and 'sessionName'")
+        if not message or not isinstance(message, str):
+            raise ValueError("message must be a non-empty string")
+        if not model or not isinstance(model, str):
+            raise ValueError("model must be a non-empty string")
+
+        data = {
+            "session": session,
+            "message": message,
+            "model": model,
+            "filterCounts": filter_counts or {},
+            "contextPrompts": context_prompts or []
+        }
+        return self.call_api('POST', '/api/v1/submitPrompt', json=data)

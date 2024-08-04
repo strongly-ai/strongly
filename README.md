@@ -43,10 +43,12 @@ API_HOST=https://your-api-host.com
 API_KEY=their-api-key-here
 ```
 
-API Keys can be created and filters assigned in the Strongly.AI application.
+API Keys are created in the Strongly.AI application.
 
 
 ## Usage
+
+The following API logic applies to V1 of the RestAPI.
 
 ### Fetching Models
 
@@ -82,17 +84,73 @@ except Exception as e:
     print(f"An error occurred: {str(e)}")
 ```
 
-### Apply Filters To Text
+### Filtering Text
 
-To Do
+To filter text using applicable filters:
 
-### Prompt Large Language Model
+```python
+from strongly import APIClient
 
-To Do
+client = APIClient()
 
-### Fetching Account Tokens
+try:
+    text_to_filter = "This is a confidential message containing a sensitive email: info@strongly.ai."
+    result = client.filter_text(text_to_filter)
 
-To Do
+    print("Filtered Text:", result['filteredText'])
+    print("Filter Counts:", result['filterCounts'])
+    print("Hash Map:", result['hashMap'])
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
+
+### Submitting a Prompt to Selected LLM
+
+To submit a prompt to the selected large language model:
+
+```python
+from strongly import APIClient
+
+client = APIClient()
+
+try:
+    session = {
+        'sessionId': 'your-session-id',
+        'sessionName': 'Your Session Name'
+    }
+    message = "What is the capital of France?"
+    model = "gpt-3.5-turbo"
+
+    result = client.submit_prompt(session, message, model)
+
+    # The structure of the result may vary depending on the API response
+    print("LLM Response:", result)
+
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
+
+### Checking Token Usage
+
+To check the token usage for the current user:
+
+```python
+from strongly import APIClient
+
+client = APIClient()
+
+try:
+    token_usage = client.check_token_usage()
+    print("Token Usage Information:")
+    print(f"Is Over Limit: {token_usage['isOverLimit']}")
+    print(f"Is Restricted: {token_usage['isRestricted']}")
+    print(f"User Token Usage: {token_usage['userTokenUsage']}")
+    print(f"Plan Token Limit: {token_usage['planTokenLimit']}")
+    print(f"Company Tokens Available: {token_usage['companyTokensAvailable']}")
+    print(f"Purchased Tokens: {token_usage['purchasedTokens']}")
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
 
 ### Creating a New Chat Session
 
@@ -111,13 +169,44 @@ except Exception as e:
     print(f"An error occurred: {str(e)}")
 ```
 
-### Remove Session
+### Deleting An Existing Session
 
-To Do
+To delete an existing session using the Strongly API:
 
-### Update Session
+```python
+from strongly import APIClient
 
-To Do
+client = APIClient()
+
+try:
+    session_id = "existing-session-id"  # Replace with your actual session ID
+
+    # Delete chat session created
+    session_data = client.delete_session(session_id)
+    print("Session deleted successfully!")
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
+
+### Renaming an Existing Chat Session
+
+To rename an existing chat session using the Strongly API:
+
+```python
+from strongly import APIClient
+
+client = APIClient()
+
+try:
+    session_id = "existing-session-id"  # Replace with your actual session ID
+    new_name = "My Renamed Chat Session"
+
+    result = client.rename_session(session_id, new_name)
+    print("Session renamed successfully!")
+    print("Message:", result['message'])
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
 
 
 ## Testing
@@ -133,6 +222,7 @@ pip install pytest pytest-cov
 ```
 
 ### Running the Tests
+
 To run the entire test suite, follow these steps:
 
 Open a terminal or command prompt.
@@ -146,6 +236,7 @@ pytest
 This command will discover and run all the tests in the tests/ directory.
 
 ### Understanding Test Output
+
 The test output will show you:
 
 * Which tests passed (marked with . or PASSED)
@@ -154,6 +245,7 @@ The test output will show you:
 * Code coverage report
 
 ### Running Specific Tests
+
 If you want to run a specific test file or test function, you can do so by specifying the path:
 
 ```bash
@@ -165,6 +257,7 @@ pytest tests/strongly.py::test_authenticate_success
 ```
 
 ### Code Coverage
+
 Our pytest.ini file is configured to run coverage reports automatically. After running the tests, you'll see a coverage report in the console output. For a more detailed report, you can run:
 
 ```bash
@@ -174,9 +267,11 @@ pytest --cov-report=html
 This will generate an HTML coverage report in the htmlcov/ directory. Open htmlcov/index.html in a web browser to view it.
 
 ### Continuous Integration
-We use [CI service name, e.g., GitHub Actions] for continuous integration. Every pull request is automatically tested to ensure that new changes don't break existing functionality.
+
+We use GitHub Actions for continuous integration. Every pull request is automatically tested to ensure that new changes don't break existing functionality.
 
 ### Contributing to Tests
+
 If you're adding new features or fixing bugs, please consider adding appropriate tests. This helps maintain the package's reliability and makes it easier for others to understand and verify your changes.
 
 If you have any questions about testing or need help interpreting test results, please don't hesitate to reach out to our support team.
