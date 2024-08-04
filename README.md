@@ -43,6 +43,25 @@ API_HOST=https://your-api-host.com
 API_KEY=their-api-key-here
 ```
 
+## Usage
+
+### Fetching Models
+
+To fetch all models from the Strongly API:
+
+```python
+from py_strongly import APIClient
+
+client = APIClient()
+
+try:
+    models_data = client.get_models()
+    print("Models:", models_data['models'])
+    print("User ID:", models_data['userId'])
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
+
 ## Testing
 
 We strive to maintain high code quality and reliability in this package. To this end, we've included a comprehensive test suite. Here's how you can run the tests and contribute to maintaining the package's quality.

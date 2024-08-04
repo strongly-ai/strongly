@@ -74,22 +74,20 @@ def test_call_api_failure(api_client):
     with pytest.raises(APIError):
         api_client.call_api('GET', '/test-endpoint')
 
-def test_get_data(api_client):
-    api_client.call_api = Mock(return_value={'data': 'test-data'})
+def test_get_models(api_client):
+    api_client.call_api = Mock(return_value={
+        'message': 'Models retrieved successfully',
+        'userId': 'test-user-id',
+        'models': [
+            {'id': '1', 'name': 'Model 1'},
+            {'id': '2', 'name': 'Model 2'}
+        ]
+    })
 
-    result = api_client.get_data()
+    result = api_client.get_models()
 
-    assert result == {'data': 'test-data'}
-    api_client.call_api.assert_called_once_with('GET', '/api/v1/getData')
-
-def test_another_method(api_client):
-    api_client.call_api = Mock(return_value={'result': 'success'})
-
-    result = api_client.another_method('test-arg')
-
-    assert result == {'result': 'success'}
-    api_client.call_api.assert_called_once_with(
-        'POST',
-        '/api/v1/anotherMethod',
-        json={'someArg': 'test-arg'}
-    )
+    assert 'models' in result
+    assert len(result['models']) == 2
+    assert result['models'][0]['name'] == 'Model 1'
+    assert result['userId'] == 'test-user-id'
+    api_client.call_api.assert_called_once_with('GET', '/api/v1/models')

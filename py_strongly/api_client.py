@@ -26,6 +26,18 @@ class APIClient:
         self.session_token = data['sessionToken']
         return self.session_token
 
+    def get_models(self):
+        """
+        Fetch all models from the API.
+
+        Returns:
+            dict: A dictionary containing the models and other response data.
+
+        Raises:
+            APIError: If the API call fails.
+        """
+        return self.call_api('GET', '/api/v1/models')
+
     def call_api(self, method, endpoint, **kwargs):
         if not self.session_token:
             self.authenticate()
@@ -46,11 +58,3 @@ class APIClient:
             raise APIError(f"API call failed: {response.text}")
 
         return response.json()
-
-    def get_data(self):
-        return self.call_api('GET', '/api/v1/getData')
-
-    def another_method(self, some_arg):
-        return self.call_api('POST', '/api/v1/anotherMethod', json={'someArg': some_arg})
-
-    # Add more methods as needed for your API endpoints
