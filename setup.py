@@ -10,7 +10,7 @@ setup(
     ],
     author="StronglyAI, Inc.",
     author_email="info@astrongly.ai",
-    description="A Python client for Strongly API",
+    description="A Python client for the Strongly.AI API",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/strongly-ai/py-strongly",

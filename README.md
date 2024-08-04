@@ -43,6 +43,7 @@ API_HOST=https://your-api-host.com
 API_KEY=their-api-key-here
 ```
 
+
 ## Usage
 
 ### Fetching Models
@@ -61,6 +62,24 @@ try:
 except Exception as e:
     print(f"An error occurred: {str(e)}")
 ```
+
+### Fetching Applied Filters
+
+To fetch the applied filters from the Strongly API:
+
+```python
+from py_strongly import APIClient
+
+client = APIClient()
+
+try:
+    filters_data = client.get_applied_filters()
+    print("Applied Filters:", filters_data['filters'])
+    print("User ID:", filters_data['userId'])
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+```
+
 
 ## Testing
 
@@ -86,7 +105,6 @@ pytest
 ```
 
 This command will discover and run all the tests in the tests/ directory.
-
 
 ### Understanding Test Output
 The test output will show you:
@@ -124,7 +142,7 @@ If you're adding new features or fixing bugs, please consider adding appropriate
 
 If you have any questions about testing or need help interpreting test results, please don't hesitate to reach out to our support team.
 
-Happy testing! 🧪✨
+
 
 
 ## Need Help? We're Here for You!

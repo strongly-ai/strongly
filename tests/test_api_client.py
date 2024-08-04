@@ -91,3 +91,32 @@ def test_get_models(api_client):
     assert result['models'][0]['name'] == 'Model 1'
     assert result['userId'] == 'test-user-id'
     api_client.call_api.assert_called_once_with('GET', '/api/v1/models')
+
+def test_get_applied_filters(api_client):
+    api_client.call_api = Mock(return_value={
+        'message': 'Applied filters retrieved successfully',
+        'userId': 'test-user-id',
+        'filters': [
+            {
+                "_id": "11",
+                "name": "Address",
+                "description": "A street address."
+            },
+            {
+                "_id": "iYafk8FLdus5SGJy2",
+                "name": "Food",
+                "description": "This is a test of the topic filter to detect food related posts."
+            }
+        ]
+    })
+
+    result = api_client.get_applied_filters()
+
+    assert 'filters' in result
+    assert len(result['filters']) == 2
+    assert result['filters'][0]['name'] == 'Address'
+    assert result['filters'][1]['name'] == 'Food'
+    assert 'checked' not in result['filters'][0]
+    assert 'checked' not in result['filters'][1]
+    assert result['userId'] == 'test-user-id'
+    api_client.call_api.assert_called_once_with('GET', '/api/v1/filters')
