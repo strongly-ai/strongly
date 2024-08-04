@@ -51,7 +51,7 @@ API_KEY=their-api-key-here
 To fetch models available to account from the Strongly API:
 
 ```python
-from py_strongly import APIClient
+from strongly import APIClient
 
 client = APIClient()
 
@@ -68,7 +68,7 @@ except Exception as e:
 To fetch the applied filters from the Strongly API:
 
 ```python
-from py_strongly import APIClient
+from strongly import APIClient
 
 client = APIClient()
 
