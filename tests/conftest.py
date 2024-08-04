@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock
-from your_api_package import APIClient
+from py_strongly import APIClient
 
 @pytest.fixture
 def mock_env(monkeypatch):
