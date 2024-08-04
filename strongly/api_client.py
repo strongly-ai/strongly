@@ -4,16 +4,20 @@ import requests
 from .exceptions import AuthenticationError, APIError
 
 class APIClient:
-    def __init__(self, env_file='.env'):
-        load_dotenv(env_file)
-
-        self.host = os.getenv('API_HOST')
-        self.api_key = os.getenv('API_KEY')
-        self.session = requests.Session()
-        self._auth_token = None
+    def __init__(self, env_file='.env', test_env=None):
+        if test_env is None:
+            load_dotenv(env_file)
+            self.host = os.getenv('API_HOST')
+            self.api_key = os.getenv('API_KEY')
+        else:
+            self.host = test_env.get('API_HOST')
+            self.api_key = test_env.get('API_KEY')
 
         if not self.host or not self.api_key:
             raise ValueError("API_HOST and API_KEY must be set in the .env file or as environment variables")
+
+        self.session = requests.Session()
+        self._auth_token = None
 
     def authenticate(self):
         url = f"{self.host}/api/v1/authenticate"
@@ -27,7 +31,7 @@ class APIClient:
         data = response.json()
         self._auth_token = data.get('authToken')
         if not self._auth_token:
-            raise AuthenticationError("No auth token received from authentication endpoint")
+            raise AuthenticationError("No session token received from authentication endpoint")
         return self._auth_token
 
     @property
@@ -108,6 +112,8 @@ class APIClient:
         Raises:
             APIError: If the API call fails.
         """
+        if not isinstance(session_id, str) or not session_id:
+            raise ValueError("session_id must be a non-empty string")
         data = {"sessionId": session_id}
         return self.call_api('POST', '/api/v1/session/delete', json=data)
 

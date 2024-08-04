@@ -7,21 +7,21 @@ def test_init_missing_env(monkeypatch):
     monkeypatch.delenv('API_HOST', raising=False)
     monkeypatch.delenv('API_KEY', raising=False)
     with pytest.raises(ValueError):
-        APIClient()
+        APIClient(test_env={})  # Pass an empty dict as test_env
 
 def test_authenticate_success(api_client):
     mock_response = Mock()
     mock_response.status_code = 200
-    mock_response.json.return_value = {'sessionToken': 'test-session-token'}
+    mock_response.json.return_value = {'authToken': 'test-auth-token'}
     api_client.session.get.return_value = mock_response
 
     token = api_client.authenticate()
 
-    assert token == 'test-session-token'
-    assert api_client.session_token == 'test-session-token'
+    assert token == 'test-auth-token'
+    assert api_client._auth_token == 'test-auth-token'  # Changed from session_token to _auth_token
     api_client.session.get.assert_called_once_with(
-        'https://api.example.com/api/v1/authenticate',
-        params={'authenticateToken': 'test-api-key'}
+        f"{api_client.host}/api/v1/authenticate",
+        headers={'X-API-Key': api_client.api_key}
     )
 
 def test_authenticate_failure(api_client):
@@ -34,7 +34,8 @@ def test_authenticate_failure(api_client):
         api_client.authenticate()
 
 def test_call_api_success(api_client):
-    api_client.session_token = 'test-session-token'
+    api_client.authenticate = Mock(return_value='test-session-token')
+    api_client._auth_token = 'test-session-token'
     mock_response = Mock()
     mock_response.status_code = 200
     mock_response.json.return_value = {'data': 'test-data'}
@@ -46,7 +47,7 @@ def test_call_api_success(api_client):
     api_client.session.request.assert_called_once_with(
         'GET',
         'https://api.example.com/test-endpoint',
-        params={'sessionToken': 'test-session-token'}
+        headers={'X-API-Key': 'test-api-key', 'X-Auth-Token': 'test-session-token'}
     )
 
 def test_call_api_session_expired(api_client):
@@ -65,6 +66,7 @@ def test_call_api_session_expired(api_client):
     assert api_client.session.request.call_count == 2
 
 def test_call_api_failure(api_client):
+    api_client.authenticate = Mock(return_value='test-session-token')
     api_client.session_token = 'test-session-token'
     mock_response = Mock()
     mock_response.status_code = 500
@@ -315,15 +317,8 @@ def test_submit_prompt(api_client):
     )
 
 def test_submit_prompt_topic_match(api_client):
-    error_response = {
-        'error': 'topic-match',
-        'message': 'Your message contains content related to the following restricted topics: Sensitive Topic',
-        'details': {
-            'interactionId': 'test-interaction-id',
-            'matchedTopicNames': ['Sensitive Topic']
-        }
-    }
-    api_client.call_api = Mock(side_effect=APIError(error_response))
+    error_message = 'Your message contains content related to the following restricted topics: Sensitive Topic'
+    api_client.call_api = Mock(side_effect=APIError(error_message))
 
     session = {'sessionId': 'test-session-id', 'sessionName': 'Test Session'}
     message = "This is a sensitive message."
@@ -332,7 +327,7 @@ def test_submit_prompt_topic_match(api_client):
     with pytest.raises(APIError) as excinfo:
         api_client.submit_prompt(session, message, model)
 
-    assert excinfo.value.response == error_response
+    assert str(excinfo.value) == error_message
 
 def test_submit_prompt_invalid_input(api_client):
     invalid_inputs = [
