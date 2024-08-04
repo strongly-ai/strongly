@@ -1,9 +1,9 @@
-# py-strongly
+# strongly
 
 
 ## Description
 
-py-strongly is a powerful and user-friendly Python client for interacting with the Strongly.AI's API. This package simplifies the process of authentication, session management, and making API calls, allowing you to focus on utilizing the data and functionality provided by our service.
+strongly is a powerful and user-friendly Python client for interacting with the Strongly.AI's API. This package simplifies the process of authentication, session management, and making API calls, allowing you to focus on utilizing the data and functionality provided by our service.
 
 
 ## Key Features
@@ -23,17 +23,17 @@ py-strongly is a powerful and user-friendly Python client for interacting with t
 - Automate tasks and workflows that interact with Strongly.AI.
 - Build custom tools and dashboards on top of Strongly.AI data.
 
-Whether you're a data scientist, software developer, or automation engineer, py-strongly provides a seamless way to leverage the power of Strongly.AI in your Python projects.
+Whether you're a data scientist, software developer, or automation engineer, strongly provides a seamless way to leverage the power of Strongly.AI in your Python projects.
 
 
 ## Install instructions
 
 To use this package, users need to:
 
-Install py-strongly and its dependencies:
+Install strongly and its dependencies:
 
 ```bash
-pip install py-strongly
+pip install strongly
 ```
 
 Create a .env file in their project directory with their API host and key:
@@ -48,7 +48,7 @@ API_KEY=their-api-key-here
 
 ### Fetching Models
 
-To fetch all models from the Strongly API:
+To fetch models available to account from the Strongly API:
 
 ```python
 from py_strongly import APIClient
@@ -79,6 +79,34 @@ try:
 except Exception as e:
     print(f"An error occurred: {str(e)}")
 ```
+
+### Apply Filters To Text
+
+To Do
+
+### Prompt Large Language Model
+
+To Do
+
+### Fetching Account Tokens
+
+To Do
+
+### Create Session
+
+To Do
+
+### Remove Session
+
+To Do
+
+### Update Session
+
+To Do
+
+### Archive Session
+
+To Do
 
 
 ## Testing
@@ -119,10 +147,10 @@ If you want to run a specific test file or test function, you can do so by speci
 
 ```bash
 # Run tests in a specific file
-pytest tests/py-strongly.py
+pytest tests/strongly.py
 
 # Run a specific test function
-pytest tests/py-strongly.py::test_authenticate_success
+pytest tests/strongly.py::test_authenticate_success
 ```
 
 ### Code Coverage

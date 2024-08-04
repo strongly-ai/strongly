@@ -1,4 +1,4 @@
-from your_api_package.exceptions import AuthenticationError, APIError
+from strongly.exceptions import AuthenticationError, APIError
 
 def test_authentication_error():
     error = AuthenticationError("Test authentication error")

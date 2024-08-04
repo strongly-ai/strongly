@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, Mock
-from your_api_package import APIClient
-from your_api_package.exceptions import AuthenticationError, APIError
+from strongly import APIClient
+from strongly.exceptions import AuthenticationError, APIError
 
 def test_init_missing_env(monkeypatch):
     monkeypatch.delenv('API_HOST', raising=False)
