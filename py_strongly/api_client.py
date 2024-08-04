@@ -3,9 +3,6 @@ from dotenv import load_dotenv
 import requests
 from .exceptions import AuthenticationError, APIError
 
-print(requests.__version__)
-print(load_dotenv.__version__)
-
 class APIClient:
     def __init__(self, env_file='.env'):
         load_dotenv(env_file)
