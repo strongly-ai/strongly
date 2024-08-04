@@ -43,6 +43,71 @@ API_HOST=https://your-api-host.com
 API_KEY=their-api-key-here
 ```
 
+## Testing
+
+We strive to maintain high code quality and reliability in this package. To this end, we've included a comprehensive test suite. Here's how you can run the tests and contribute to maintaining the package's quality.
+
+### Prerequisites
+
+Before running the tests, make sure you have the required testing dependencies installed. You can install them using pip:
+
+```bash
+pip install pytest pytest-cov
+```
+
+### Running the Tests
+To run the entire test suite, follow these steps:
+
+Open a terminal or command prompt.
+Navigate to the root directory of the package.
+Run the following command:
+
+```bash
+pytest
+```
+
+This command will discover and run all the tests in the tests/ directory.
+
+
+### Understanding Test Output
+The test output will show you:
+
+* Which tests passed (marked with . or PASSED)
+* Which tests failed (marked with F or FAILED)
+* The overall test summary
+* Code coverage report
+
+### Running Specific Tests
+If you want to run a specific test file or test function, you can do so by specifying the path:
+
+```bash
+# Run tests in a specific file
+pytest tests/py-strongly.py
+
+# Run a specific test function
+pytest tests/py-strongly.py::test_authenticate_success
+```
+
+### Code Coverage
+Our pytest.ini file is configured to run coverage reports automatically. After running the tests, you'll see a coverage report in the console output. For a more detailed report, you can run:
+
+```bash
+pytest --cov-report=html
+```
+
+This will generate an HTML coverage report in the htmlcov/ directory. Open htmlcov/index.html in a web browser to view it.
+
+### Continuous Integration
+We use [CI service name, e.g., GitHub Actions] for continuous integration. Every pull request is automatically tested to ensure that new changes don't break existing functionality.
+
+### Contributing to Tests
+If you're adding new features or fixing bugs, please consider adding appropriate tests. This helps maintain the package's reliability and makes it easier for others to understand and verify your changes.
+
+If you have any questions about testing or need help interpreting test results, please don't hesitate to reach out to our support team.
+
+Happy testing! 🧪✨
+
+
 ## Need Help? We're Here for You!
 
 We're thrilled you're using our package and want to ensure you have the best experience possible. If you have any questions, run into any issues, or just want to share your feedback, we'd love to hear from you!
